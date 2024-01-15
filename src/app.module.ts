@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
 import { JenisBarangModule } from './jenis-barang/jenis-barang.module';
 import { StokBarangModule } from './stok-barang/stok-barang.module';
+import { TransaksiModule } from './transaksi/transaksi.module';
 import 'dotenv/config';
 
 @Module({
@@ -20,6 +21,7 @@ import 'dotenv/config';
     }),
     JenisBarangModule,
     StokBarangModule,
+    TransaksiModule,
   ],
   controllers: [AppController],
   providers: [AppService],

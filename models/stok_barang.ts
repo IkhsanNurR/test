@@ -6,7 +6,11 @@ import {
   Index,
   Sequelize,
   ForeignKey,
+  BelongsTo,
+  HasMany,
 } from 'sequelize-typescript';
+import { jenis_barang } from './jenis_barang';
+import { transaksi } from './transaksi';
 
 export interface stok_barangAttributes {
   id_barang?: number;
@@ -36,6 +40,7 @@ export class stok_barang
   @Column({ allowNull: true, type: DataType.STRING })
   nama_barang?: string;
 
+  @ForeignKey(() => jenis_barang)
   @Column({ allowNull: true, type: DataType.INTEGER })
   id_jenis_barang?: number;
 
@@ -55,4 +60,10 @@ export class stok_barang
     defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
   })
   updated_at?: Date;
+
+  @BelongsTo(() => jenis_barang)
+  jenis_barang?: jenis_barang;
+
+  @HasMany(() => transaksi, { sourceKey: 'id_barang' })
+  transaksis?: transaksi[];
 }

@@ -17,23 +17,22 @@ export enum SortOrder {
   ASC = 'asc',
 }
 
-export enum respon {
-  SUDAH_LUNAS = 'Sudah Lunas',
-  BELUM_LUNAS_AKAN_BAYAR = 'Belum Lunas - Akan Bayar',
-  BATAL = 'Batal',
-}
-
 export class QueryParams {
   @Type(() => String)
   @IsOptional()
   @IsString()
   @ApiProperty({ required: false })
-  keyword?: string;
+  keyword?: string = '';
 
   @IsOptional()
   @IsDateString()
   @ApiProperty({ required: false })
-  tanggal_datang_awal?: Date;
+  tanggal_awal?: Date;
+
+  @IsOptional()
+  @IsDateString()
+  @ApiProperty({ required: false })
+  tanggal_akhir?: Date;
 
   @Type(() => Number)
   @IsInt()
@@ -67,6 +66,24 @@ export class QueryParams {
   })
   @ApiProperty({ required: false })
   is_all_data?: boolean = false;
+
+  @Type(() => String)
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  id_jenis_barang?: string;
+
+  @Type(() => String)
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  id_barang?: string;
+
+  @Type(() => String)
+  @IsString()
+  @IsOptional()
+  @ApiProperty({ required: false })
+  id_transaksi?: string;
 
   constructor(
     keyword = '',
