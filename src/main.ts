@@ -4,6 +4,7 @@ import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.int
 import { ValidationPipe } from '@nestjs/common';
 import 'dotenv/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { GlobalExceptionFilter } from './utils/exception_filter';
 
 async function bootstrap() {
   const port = process.env.PORT;
@@ -17,6 +18,7 @@ async function bootstrap() {
   );
   app.enableCors();
   app.setGlobalPrefix('api/v1');
+  app.useGlobalFilters(new GlobalExceptionFilter());
   const config = new DocumentBuilder()
     .setTitle('DB  API')
     .setDescription('API DOCS FOR DB')

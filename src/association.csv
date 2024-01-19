@@ -1,3 +1,2 @@
-1:N, id_jenis_barang, id_jenis_barang, jenis_barang, stok_barang
-1:N, id_barang, id_barang, stok_barang, transaksi
-1:N, id_jenis_barang, id_jenis_barang, jenis_barang, transaksi
+1:N,books_code,books_code,books,transaction
+1:N,members_code,members_code,members,transaction

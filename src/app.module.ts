@@ -2,10 +2,10 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { SequelizeModule } from '@nestjs/sequelize';
-import { JenisBarangModule } from './jenis-barang/jenis-barang.module';
-import { StokBarangModule } from './stok-barang/stok-barang.module';
-import { TransaksiModule } from './transaksi/transaksi.module';
+import { BooksModule } from './books/books.module';
+import { MembersModule } from './members/members.module';
 import 'dotenv/config';
+import { DatabaseModule } from './db/db.module';
 
 @Module({
   imports: [
@@ -19,9 +19,9 @@ import 'dotenv/config';
       models: [],
       autoLoadModels: true,
     }),
-    JenisBarangModule,
-    StokBarangModule,
-    TransaksiModule,
+    BooksModule,
+    MembersModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

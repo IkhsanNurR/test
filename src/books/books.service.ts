@@ -1,34 +1,30 @@
 import { Injectable } from '@nestjs/common';
-import { stok_barang } from 'models';
+import { CreateBookDto } from '../dto/create-book.dto';
+import { UpdateBookDto } from '../dto/update-book.dto';
+import { books } from '../../models';
+import { MyResponse } from '../utils/response.interface';
+import { CustomError } from '../utils/customError';
+import { QueryParams } from '../dto/request.dto';
 import { Op } from 'sequelize';
-import { Sequelize } from 'sequelize-typescript';
-import { QueryParams } from 'src/dto/request.dto';
-import {
-  createStokBarangDto,
-  updateStokBarangDto,
-} from 'src/dto/stok-barang.dto';
-import { CustomError } from 'src/utils/customError';
-import { MyResponse } from 'src/utils/response.interface';
 
 @Injectable()
-export class StokBarangService {
-  constructor(private sequelize: Sequelize) {}
-
-  async create(createDTO: createStokBarangDto) {
+export class BooksService {
+  async create(createBookDto: CreateBookDto) {
     try {
-      const createJenisBarang = await stok_barang
+      const newBooks = await books
         .create({
-          nama_barang: createDTO.nama,
-          id_jenis_barang: createDTO.id_jenis_barang,
-          stok: createDTO.stok,
+          author: createBookDto.author,
+          books_code: createBookDto.books_code,
+          stock: createBookDto.stock,
+          title: createBookDto.title,
         })
         .catch(function (error) {
           throw new CustomError(error.original.detail, 400);
         });
 
       const response: MyResponse = {
-        data: createJenisBarang,
-        message: 'Berhasil menambahkan data',
+        data: newBooks,
+        message: 'Success create Books',
         statusCode: 200,
       };
       return response;
@@ -42,19 +38,30 @@ export class StokBarangService {
       const offset = params.page ? (params.page - 1) * params.per_page : 0;
       const where: any = {};
       if (params.keyword) {
-        where.nama_barang = {
+        where.title = {
+          [Op.iLike]: `%${params.keyword}%`,
+        };
+        where.author = {
           [Op.iLike]: `%${params.keyword}%`,
         };
       }
 
-      const find = await stok_barang.findAll({
+      if (params.available) {
+        where.stock = {
+          [Op.not]: 0,
+        };
+      }
+
+      const find = await books.findAll({
         where,
         limit: params.is_all_data ? undefined : params.per_page,
         offset: params.is_all_data ? undefined : offset,
+        order: [[params.order_by, params.sort]],
       });
-      const total = await stok_barang.count({
+      const total = await books.count({
         where,
       });
+      console.log(params);
 
       const response: MyResponse = {
         data: find,
@@ -72,7 +79,7 @@ export class StokBarangService {
           keyword: params.keyword,
           is_all_data: params.is_all_data,
         },
-        message: 'Berhasil menemukan data',
+        message: 'Success get books data',
         statusCode: 200,
       };
       return response;
@@ -81,15 +88,15 @@ export class StokBarangService {
     }
   }
 
-  async findOne(id: number) {
+  async findOne(code: string) {
     try {
-      const find = await stok_barang.findByPk(id);
+      const find = await books.findByPk(code);
       if (!find) {
         throw new CustomError('Data tidak ditemukan!', 404);
       }
       const response: MyResponse = {
         data: find,
-        message: 'Berhasil menemukan data',
+        message: 'Success get books by code',
         statusCode: 200,
       };
       return response;
@@ -98,27 +105,33 @@ export class StokBarangService {
     }
   }
 
-  async update(id: number, updateStokDTO: updateStokBarangDto) {
+  async update(code: string, updateBookDto: UpdateBookDto) {
     try {
-      const update = await stok_barang.update(
+      const find = await books.findByPk(code);
+      if (!find) {
+        throw new CustomError('Books code not found!', 404);
+      }
+      const update = await books.update(
         {
-          nama_barang: updateStokDTO.nama,
-          stok: updateStokDTO.stok,
-          id_jenis_barang: updateStokDTO.id_jenis_barang,
+          author: updateBookDto.author,
+          books_code: updateBookDto.books_code,
+          stock: updateBookDto.stock,
+          title: updateBookDto.title,
         },
         {
           where: {
-            id_barang: id,
+            books_code: code,
           },
           returning: true,
         },
       );
+
       if (update[0] == 0) {
-        throw new CustomError('Data tidak diperbarui', 400);
+        throw new CustomError('No Data updated', 400);
       }
       const response: MyResponse = {
         data: update,
-        message: 'Berhasil mengupdate stok barang',
+        message: 'Success update Books',
         statusCode: 200,
       };
       return response;
@@ -127,26 +140,24 @@ export class StokBarangService {
     }
   }
 
-  async remove(id: number) {
+  async remove(code: string) {
     try {
-      const deleteJenisBarang = await stok_barang
+      const find = await books.findByPk(code);
+      if (!find) {
+        throw new CustomError('Books code not found!', 404);
+      }
+      const deleteJenisBarang = await books
         .destroy({
           where: {
-            id_barang: id,
+            books_code: code,
           },
-          cascade: true,
         })
         .catch(function (error) {
           throw new CustomError(error.original.detail, 400);
         });
-
-      if (deleteJenisBarang == 0) {
-        throw new CustomError('Data tidak terhapus', 400);
-      }
-
       const response: MyResponse = {
         data: deleteJenisBarang,
-        message: 'Berhasil menghapus stok barang',
+        message: 'Success Delete Books',
         statusCode: 200,
       };
       return response;

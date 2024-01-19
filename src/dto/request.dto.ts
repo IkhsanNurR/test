@@ -24,16 +24,6 @@ export class QueryParams {
   @ApiProperty({ required: false })
   keyword?: string = '';
 
-  @IsOptional()
-  @IsDateString()
-  @ApiProperty({ required: false })
-  tanggal_awal?: Date;
-
-  @IsOptional()
-  @IsDateString()
-  @ApiProperty({ required: false })
-  tanggal_akhir?: Date;
-
   @Type(() => Number)
   @IsInt()
   @Min(1)
@@ -67,23 +57,13 @@ export class QueryParams {
   @ApiProperty({ required: false })
   is_all_data?: boolean = false;
 
-  @Type(() => String)
-  @IsString()
   @IsOptional()
+  @IsBoolean()
+  @Transform(({ obj, key }) => {
+    return obj[key] === 'true' ? true : obj[key] === 'false' ? false : obj[key];
+  })
   @ApiProperty({ required: false })
-  id_jenis_barang?: string;
-
-  @Type(() => String)
-  @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
-  id_barang?: string;
-
-  @Type(() => String)
-  @IsString()
-  @IsOptional()
-  @ApiProperty({ required: false })
-  id_transaksi?: string;
+  available?: boolean = false;
 
   constructor(
     keyword = '',
