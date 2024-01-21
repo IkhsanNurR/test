@@ -6,6 +6,7 @@ import { BooksModule } from './books/books.module';
 import { MembersModule } from './members/members.module';
 import 'dotenv/config';
 import { DatabaseModule } from './db/db.module';
+import { TransactionModule } from './transaction/transaction.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { DatabaseModule } from './db/db.module';
     BooksModule,
     MembersModule,
     DatabaseModule,
+    TransactionModule,
   ],
   controllers: [AppController],
   providers: [AppService],

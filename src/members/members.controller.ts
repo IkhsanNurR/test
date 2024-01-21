@@ -1,9 +1,21 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Query,
+} from '@nestjs/common';
 import { MembersService } from './members.service';
-import { CreateMemberDto } from './dto/create-member.dto';
-import { UpdateMemberDto } from './dto/update-member.dto';
+import { CreateMemberDto } from '../dto/create-member.dto';
+import { UpdateMemberDto } from '../dto/update-member.dto';
+import { QueryParamsMembers } from 'src/dto/request.dto';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('members')
+@ApiTags('API-MEMBERS')
 export class MembersController {
   constructor(private readonly membersService: MembersService) {}
 
@@ -13,22 +25,25 @@ export class MembersController {
   }
 
   @Get()
-  findAll() {
-    return this.membersService.findAll();
+  findAll(@Query() params: QueryParamsMembers) {
+    return this.membersService.findAll(params);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.membersService.findOne(+id);
+  @Get(':code')
+  findOne(@Param('code') code: string) {
+    return this.membersService.findOne(code);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMemberDto: UpdateMemberDto) {
-    return this.membersService.update(+id, updateMemberDto);
+  @Patch(':code')
+  update(
+    @Param('code') code: string,
+    @Body() updateMemberDto: UpdateMemberDto,
+  ) {
+    return this.membersService.update(code, updateMemberDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.membersService.remove(+id);
+  @Delete(':code')
+  remove(@Param('code') code: string) {
+    return this.membersService.remove(code);
   }
 }

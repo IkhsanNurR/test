@@ -4,7 +4,7 @@ import { UpdateBookDto } from '../dto/update-book.dto';
 import { books } from '../../models';
 import { MyResponse } from '../utils/response.interface';
 import { CustomError } from '../utils/customError';
-import { QueryParams } from '../dto/request.dto';
+import { QueryParamsBooks } from '../dto/request.dto';
 import { Op } from 'sequelize';
 
 @Injectable()
@@ -33,7 +33,7 @@ export class BooksService {
     }
   }
 
-  async findAll(params: QueryParams) {
+  async findAll(params: QueryParamsBooks) {
     try {
       const offset = params.page ? (params.page - 1) * params.per_page : 0;
       const where: any = {};
@@ -61,7 +61,6 @@ export class BooksService {
       const total = await books.count({
         where,
       });
-      console.log(params);
 
       const response: MyResponse = {
         data: find,

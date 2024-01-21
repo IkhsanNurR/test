@@ -16,6 +16,7 @@ export interface membersAttributes {
   created_at?: Date;
   updated_at?: Date;
   penalized?: boolean;
+  penalized_until?: Date;
 }
 
 @Table({ tableName: 'members', schema: 'public', timestamps: false })
@@ -50,6 +51,9 @@ export class members
     defaultValue: Sequelize.literal('false'),
   })
   penalized?: boolean;
+
+  @Column({ allowNull: true, type: DataType.DATE })
+  penalized_until?: Date;
 
   @HasMany(() => transaction, { sourceKey: 'members_code' })
   transactions?: transaction[];

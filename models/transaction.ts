@@ -17,6 +17,7 @@ export interface transactionAttributes {
   members_code?: string;
   created_at?: Date;
   updated_at?: Date;
+  returned_at?: Date;
 }
 
 @Table({ tableName: 'transaction', schema: 'public', timestamps: false })
@@ -35,10 +36,12 @@ export class transaction
 
   @ForeignKey(() => books)
   @Column({ allowNull: true, type: DataType.STRING })
+  @Index({ name: 'transaction_unique', using: 'btree', unique: true })
   books_code?: string;
 
   @ForeignKey(() => members)
   @Column({ allowNull: true, type: DataType.STRING })
+  @Index({ name: 'transaction_unique', using: 'btree', unique: true })
   members_code?: string;
 
   @Column({
@@ -54,6 +57,9 @@ export class transaction
     defaultValue: Sequelize.literal('CURRENT_TIMESTAMP'),
   })
   updated_at?: Date;
+
+  @Column({ allowNull: true, type: DataType.DATE })
+  returned_at?: Date;
 
   @BelongsTo(() => books)
   book?: books;

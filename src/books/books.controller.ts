@@ -12,7 +12,7 @@ import { BooksService } from './books.service';
 import { CreateBookDto } from '../dto/create-book.dto';
 import { UpdateBookDto } from '../dto/update-book.dto';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
-import { QueryParams } from '../dto/request.dto';
+import { QueryParamsBooks } from '../dto/request.dto';
 
 @Controller('books')
 @ApiTags('API BOOKS')
@@ -25,7 +25,7 @@ export class BooksController {
   }
 
   @Get()
-  findAll(@Query() params: QueryParams) {
+  findAll(@Query() params: QueryParamsBooks) {
     return this.booksService.findAll(params);
   }
 

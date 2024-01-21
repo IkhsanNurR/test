@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { BooksController } from './books.controller';
 import { BooksService } from './books.service';
 import { MyResponse } from '../utils/response.interface';
-import { QueryParams, SortOrder } from '../dto/request.dto';
+import { QueryParamsBooks, SortOrder } from '../dto/request.dto';
 
 jest.mock('../../models/books', () => {
   const SequelizeMock = require('sequelize-mock');
