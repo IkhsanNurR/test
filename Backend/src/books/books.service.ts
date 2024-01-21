@@ -19,7 +19,7 @@ export class BooksService {
           title: createBookDto.title,
         })
         .catch(function (error) {
-          throw new CustomError(error.original.detail, 400);
+          throw new CustomError(error?.original?.detail, 400);
         });
 
       const response: MyResponse = {
@@ -65,8 +65,8 @@ export class BooksService {
       const response: MyResponse = {
         data: find,
         metadata: {
-          total_count: total,
-          page_count: Math.ceil(total / (params.per_page ?? 10)),
+          total_count: total ?? 0,
+          page_count: Math.ceil(total / (params.per_page ?? 10)) ?? 0,
           page: params.page,
           per_page: params.is_all_data
             ? total
@@ -145,15 +145,11 @@ export class BooksService {
       if (!find) {
         throw new CustomError('Books code not found!', 404);
       }
-      const deleteJenisBarang = await books
-        .destroy({
-          where: {
-            books_code: code,
-          },
-        })
-        .catch(function (error) {
-          throw new CustomError(error.original.detail, 400);
-        });
+      const deleteJenisBarang = await books.destroy({
+        where: {
+          books_code: code,
+        },
+      });
       const response: MyResponse = {
         data: deleteJenisBarang,
         message: 'Success Delete Books',

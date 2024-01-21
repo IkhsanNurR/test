@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { CreateTransactionDto } from '../dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
-import { books, members, transaction } from 'models';
-import { CustomError } from 'src/utils/customError';
+import { UpdateTransactionDto } from '../dto/update-transaction.dto';
+import { books, members, transaction } from '../../models';
+import { CustomError } from '../utils/customError';
 import { Sequelize } from 'sequelize-typescript';
-import { MyResponse } from 'src/utils/response.interface';
+import { MyResponse } from '../utils/response.interface';
 import * as moment from 'moment';
 
 @Injectable()
@@ -75,7 +75,7 @@ export class TransactionService {
       await t.commit();
 
       const response: MyResponse = {
-        data: createTransaction,
+        data: { createTransaction, decrementBook },
         message: 'Success borrow a books',
         statusCode: 200,
       };

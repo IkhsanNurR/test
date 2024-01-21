@@ -11,7 +11,7 @@ import {
 import { MembersService } from './members.service';
 import { CreateMemberDto } from '../dto/create-member.dto';
 import { UpdateMemberDto } from '../dto/update-member.dto';
-import { QueryParamsMembers } from 'src/dto/request.dto';
+import { QueryParamsMembers } from '../dto/request.dto';
 import { ApiTags } from '@nestjs/swagger';
 
 @Controller('members')

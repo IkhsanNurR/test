@@ -1,10 +1,9 @@
 import { Injectable } from '@nestjs/common';
-import { CreateMemberDto } from '../dto/create-member.dto';
 import { UpdateMemberDto } from '../dto/update-member.dto';
-import { books, members, transaction } from 'models';
-import { CustomError } from 'src/utils/customError';
-import { MyResponse } from 'src/utils/response.interface';
-import { QueryParamsMembers } from 'src/dto/request.dto';
+import { books, members, transaction } from '../../models';
+import { CustomError } from '../utils/customError';
+import { MyResponse } from '../utils/response.interface';
+import { QueryParamsMembers } from '../dto/request.dto';
 import { Op } from 'sequelize';
 
 @Injectable()
@@ -17,7 +16,7 @@ export class MembersService {
           name: createMemberDto.name,
         })
         .catch(function (error) {
-          throw new CustomError(error.original.detail, 400);
+          throw new CustomError(error?.original?.detail, 400);
         });
 
       const response: MyResponse = {
@@ -64,8 +63,8 @@ export class MembersService {
       const response: MyResponse = {
         data: find,
         metadata: {
-          total_count: total,
-          page_count: Math.ceil(total / (params.per_page ?? 10)),
+          total_count: total ?? 0,
+          page_count: Math.ceil(total / (params.per_page ?? 10)) ?? 0,
           page: params.page,
           per_page: params.is_all_data
             ? total
