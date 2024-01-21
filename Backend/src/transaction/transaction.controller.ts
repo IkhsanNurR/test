@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { TransactionService } from './transaction.service';
 import { CreateTransactionDto } from '../dto/create-transaction.dto';
-import { UpdateTransactionDto } from './dto/update-transaction.dto';
+import { UpdateTransactionDto } from '../dto/update-transaction.dto';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @Controller('transaction')
